@@ -15,7 +15,7 @@ jobs:
         with:
           authkey: ${{ secrets.TAILSCALE_AUTH_KEY }}  # 从 GitHub Secret 读取密钥
           hostname: github-us  # 临时节点名，控制台易识别
-          ephemeral: true  # 任务结束自动删除节点，安全无残留
+          args: --advertise-exit-node  # 任务结束自动删除节点，安全无残留
           tags: tag:ci  # 可选：添加标签，便于 Tailscale 权限管控
 
       # 2. 验证连接（可替换为你的实际业务操作）
