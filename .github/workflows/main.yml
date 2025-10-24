@@ -1,0 +1,27 @@
+name: Tailscale 基础连接测试
+on: [push]  # 仅在代码推送时触发（可按需改为 pull_request、schedule 等）
+
+jobs:
+  tailscale-connect:
+    runs-on: ubuntu-latest  # 推荐 Linux 环境，兼容性最佳
+    steps:
+      # 1. 安装并启动 Tailscale（核心步骤）
+      - name: 启动 Tailscale 并加入网络
+        uses: tailscale/github-action@v2
+        with:
+          auth-key: ${{ secrets.TAILSCALE_AUTH_KEY }}  # 从 GitHub Secret 读取密钥
+          hostname: github-us  # 临时节点名，控制台易识别
+          ephemeral: true  # 任务结束自动删除节点，安全无残留
+
+      # 2. 验证连接（可替换为你的实际业务操作）
+      - name: 验证 Tailscale 网络连通性
+        run: |
+          echo "当前 Tailscale IPv4 地址："
+          tailscale ip -4  # 查看节点IP，确认已加入网络
+          # 替换下方命令为你的实际需求（如访问 Tailscale 内服务）
+          # curl -s http://你的Tailscale服务IP:端口/health  # 示例：检查服务健康状态
+
+      # 3. 手动兜底清理（ephemeral模式已自动清理，此步为双重保障）
+      - name: 退出 Tailscale 网络
+        if: always()  # 即使前面步骤失败，也执行清理
+        run: sudo tailscale status
