@@ -11,11 +11,12 @@ jobs:
     steps:
       # 1. 安装并启动 Tailscale（核心步骤）
       - name: 启动 Tailscale 并加入网络
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v3
         with:
-          auth-key: ${{ secrets.TAILSCALE_AUTH_KEY }}  # 从 GitHub Secret 读取密钥
+          authkey: ${{ secrets.TAILSCALE_AUTH_KEY }}  # 从 GitHub Secret 读取密钥
           hostname: github-us  # 临时节点名，控制台易识别
           ephemeral: true  # 任务结束自动删除节点，安全无残留
+          tags: tag:ci  # 可选：添加标签，便于 Tailscale 权限管控
 
       # 2. 验证连接（可替换为你的实际业务操作）
       - name: 验证 Tailscale 网络连通性
