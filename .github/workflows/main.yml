@@ -1,9 +1,13 @@
 name: Tailscale 基础连接测试
-on: [push]  # 仅在代码推送时触发（可按需改为 pull_request、schedule 等）
+
+on:
+  workflow_dispatch:
 
 jobs:
   tailscale-connect:
     runs-on: ubuntu-latest  # 推荐 Linux 环境，兼容性最佳
+    timeout-minutes: 3600
+
     steps:
       # 1. 安装并启动 Tailscale（核心步骤）
       - name: 启动 Tailscale 并加入网络
